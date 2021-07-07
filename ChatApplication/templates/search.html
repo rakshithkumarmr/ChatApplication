@@ -1,0 +1,22 @@
+{% extends 'basic.html' %}
+{% block title %}search user{% endblock %}
+{% block body %}
+{% load static %}
+<h2 style="margin-left: 13%;padding-top: 2%;font-family: 'Lemonada', cursive;color: #0d0f91">Searched result for '{{ search }}'</h2>
+    {% if user %}
+   <div class="row" style="margin-left: 10%">
+       {% for x in user %}
+        <div class="card" style="width: 18rem;margin-left: 5%">
+                    <h6 style="font-weight: bold">Username:  :{{ x.username }}</h6>
+                    <h6 style="font-weight: bold">Name  :{{ x.name }}</h6>
+                    <h6 style="font-weight: bold">Email  :{{ x.email }}</h6>
+        </div>
+        {% endfor %}
+    </div>
+    {% else%}
+    {% for x in messages %}
+    <h4 style="margin-left: 13%;padding-top: 2%;font-family: 'Lemonada', cursive;color: red">{{ x }}</h4>
+    {% endfor %}
+    {% endif %}
+
+{% endblock %}

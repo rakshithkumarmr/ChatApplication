@@ -1,0 +1,32 @@
+{% extends 'basic.html' %}
+{% block title %}Edit Profile{% endblock %}
+{% block body %}
+{% load static %}
+    {% if messages %}
+            {% for x in messages %}
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <strong>{{ x }}</strong>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+<table class="table" style="margin-left: 5%">
+            <tr>
+                <th>Name</th>
+                <th>{{ form.name }}</th>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <th>{{ form.email }}</th>
+            </tr>
+            <tr>
+                <th>Address</th>
+                <th>{{ form.address }}</th>
+            </tr>
+            <tr>
+                <th>
+                    <a href="{% url '' %}" class="btn btn-primary" >Edit profile</a>
+                </th>
+            </tr>
+        </table>
+{% endblock %}

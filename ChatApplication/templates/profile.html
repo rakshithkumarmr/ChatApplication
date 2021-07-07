@@ -1,0 +1,28 @@
+{% extends 'basic.html' %}
+{% block title %}Profile{% endblock %}
+{% block body %}
+{% load static %}
+
+    <form method="post" action="{% url 'edit_profile' %}">
+        {% csrf_token %}
+    <table class="table" style="margin-left: 5%">
+            <tr>
+                <th>Name</th>
+                <th>
+                    <input value="{{ form.name }}" required name="first_name" >
+                </th>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <th>
+                    <input value="{{ form.email }}" required name="email" >
+                </th>
+            </tr>
+            <tr>
+                <th>
+                    <button type="submit" class="btn btn-primary" >Update</button>
+                </th>
+            </tr>
+        </table>
+    </form>
+{% endblock %}

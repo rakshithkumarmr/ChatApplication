@@ -1,0 +1,36 @@
+{% extends 'basic.html' %}
+{% block title %}Signup{% endblock %}
+{% block body %}
+{% load static %}
+
+
+    <div class="container">
+    <h2 style=";padding-top: 2%;font-family: 'Lemonada', cursive;color: #0d0f91">Create Your Account</h2>
+        {% if messages %}
+            {% for x in messages %}
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <strong>Something went wrong !.</strong> {{ x }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endfor %}
+        {% endif %}
+        {% if msg %}
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                <strong>{{ msg }}</strong>
+            </div>
+        {% endif %}
+        <form method="post" action="#">
+            {% csrf_token %}
+            <div class="form-group">
+                {{ form.as_p }}
+            <div>
+            <button class="btn btn-primary" type="submit" style="width: 25%">Sign up</button>
+            <p style="margin-top: 1%;font-weight: bolder">Allredy Registered ?
+                <a href="{% url 'login' %}"> Login Here </a>
+            </p>
+            </div>
+        </form>
+    </div>
+{% endblock %}

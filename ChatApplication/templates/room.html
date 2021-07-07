@@ -1,0 +1,63 @@
+{% extends 'basic.html' %}
+{% block title %}Edit Profile{% endblock %}
+{% block body %}
+{% load static %}
+
+<h2>{{room}} - DjChat</h2>
+
+<div id="display">
+
+
+
+<div class="container">
+    <style>
+    input[type=text], select {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    }
+
+    button[type=submit] {
+    width: 100%;
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    }
+
+    button[type=submit]:hover {
+    background-color: #45a049;
+    }
+
+    </style>
+    <div>
+        {% if mess %}
+            <div style="border: #0d0f91;border-style: solid;">
+            {% for x in mess %}
+                <div style="font-weight: bold;font-size: larger">{{ x.value }}</div>
+                <div> User = {{ x.user }}</div>
+                <div> {{ x.date }}</div><hr>
+            {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <form id="post-form" method="post" action="{% url 'send' %}">
+        {% csrf_token %}
+        <input type="hidden" name="username" id="username" value="{{username}}"/>
+        <input type="hidden" name="room" id="room" value="{{room}}"/>
+        <input type="hidden" name="room_id" id="room_id" value="{{room_details.id}}"/>
+        <input type="text" name="message" id="message" width="100px" required/>
+        <button type="submit" >Send</button>
+    </form>
+</div>
+
+</div>
+{% endblock %}
