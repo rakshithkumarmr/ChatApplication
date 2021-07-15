@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="db" uuid="d972b720-1031-4481-be13-72dc71cc313e">
+    <data-source source="LOCAL" name="chat" uuid="484dd8a1-fa90-41d9-8ff4-7be1d3bb38f4">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:C:\Users\radha\Desktop\Project\ChatApplication\db.sqlite3</jdbc-url>
+      <jdbc-url>jdbc:sqlite:C:\Users\radha\Desktop\Project\ChatApplication\chat.sqlite3</jdbc-url>
       <driver-properties>
         <property name="enable_load_extension" value="true" />
       </driver-properties>

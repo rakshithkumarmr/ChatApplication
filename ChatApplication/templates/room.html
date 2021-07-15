@@ -40,11 +40,31 @@
     <div>
         {% if mess %}
             <div style="border: #0d0f91;border-style: solid;">
+            <br>
             {% for x in mess %}
-                <div style="font-weight: bold;font-size: larger">{{ x.value }}</div>
-                <div> User = {{ x.user }}</div>
-                <div> {{ x.date }}</div><hr>
-            {% endfor %}
+                <div class="" >
+                    <div style="align-items: initial">
+                {% if x.user == username %}
+                    <div style="margin-left: 50%;">
+                        <div style="margin-right: 5%;background-color: lightcyan;padding: 2%">
+                            <h3>{{ x.value }}</h3></div>
+                        <div style=";font-size: xx-small"> {{ x.date }}</div>
+                        <div style=";font-size: small">
+                            <a href="{% url 'delete' id=x.id ro=x.room  %}">Delete</a>
+                        </div>
+                    </div>
+                {% else %}
+                    <div style="margin-right: 50%;">
+                        <div style="margin-left: 5%;background-color: lightcoral;padding: 2%">
+                            <h3>{{ x.value }}</h3></div>
+                        <div style="margin-left: 5%;font-size: xx-small"> {{ x.date }}</div>
+                        <div style="margin-left: 5%;font-size: small">
+                            <a href="{% url 'delete' id=x.id ro=x.room  %}">Delete</a>
+                        </div>
+                    </div>
+                {% endif %}
+                </div>
+             {% endfor %}
             </div>
         {% endif %}
     </div>
@@ -54,7 +74,7 @@
         <input type="hidden" name="username" id="username" value="{{username}}"/>
         <input type="hidden" name="room" id="room" value="{{room}}"/>
         <input type="hidden" name="room_id" id="room_id" value="{{room_details.id}}"/>
-        <input type="text" name="message" id="message" width="100px" required/>
+        <input type="text" name="message" id="message" width="100px" placeholder="message" required/>
         <button type="submit" >Send</button>
     </form>
 </div>

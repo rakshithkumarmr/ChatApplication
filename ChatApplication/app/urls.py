@@ -14,5 +14,6 @@ urlpatterns = [
     path('send/',views.send,name='send'),
     path('room/<str:room>/', views.room, name='room1'),
     path('seacrh/', views.search, name='seacrh'),
+    path('delete/<str:id><str:ro>/',views.delete,name='delete'),
 
 ]

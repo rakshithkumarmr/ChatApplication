@@ -46,8 +46,8 @@
           </ul>
           <form class="form-inline my-2 my-lg-0" style="padding-right: 2%" method="post" action="{% url 'seacrh' %}">
             {% csrf_token %}
-                <input class="form-control mr-sm-2" placeholder="Song name only" aria-label="Search" name="search" required>
-                <input class="btn btn-outline-success my-2 my-sm-0" type="submit" value="seacrh"></input>
+                <input class="form-control mr-sm-2" placeholder="search" aria-label="Search" name="search" required>
+                <input class="btn btn-outline-success my-2 my-sm-0" type="submit" value="seacrh" />
             </form>
           <div>
           <span style="color: white;font-size: 115%;font-weight: bolder"> Welcome {{ request.user}}</span>

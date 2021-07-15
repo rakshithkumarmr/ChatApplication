@@ -3,9 +3,22 @@
 {% block body %}
 {% load static %}
 
-    <form method="post" action="{% url 'edit_profile' %}">
+    <form method="post" action="{% url 'edit_profile' %}" enctype="multipart/form-data">
         {% csrf_token %}
     <table class="table" style="margin-left: 5%">
+            <tr>
+                <th>
+                    <input type="hidden" value="{{ form.id }}" name="id">
+                </th>
+            </tr>
+            <tr>
+                <th>Profile</th>
+                <th>
+                    <img src="{{ form.profile_image.url }}" height="100" width="100" >
+                    <br>
+                    <input type="file" id="myfile" name="image">
+                </th>
+            </tr>
             <tr>
                 <th>Name</th>
                 <th>

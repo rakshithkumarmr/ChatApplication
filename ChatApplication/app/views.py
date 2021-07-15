@@ -35,6 +35,8 @@ def signup(request):
         ab = SignupForm(request.POST)
         if ab.is_valid():
             captcha = request.POST.get("captcha")
+            a= ProfileModel.objects.create(username=username)
+            a.save()
             myuser = User.objects.create_user(username=username, password=password)
             myuser.save()
             messages.error(request, "Successfully registerd Your Account")
@@ -68,20 +70,24 @@ def logout_user(request):
 
 def edit_profile(request):
     if request.method == "POST":
+        id = request.POST['id']
+        first_name = request.POST['first_name']
+        email = request.POST['email']
         try:
-            form = ProfileModel.objects.get(username=request.user)
-            first_name = request.POST['first_name']
-            email = request.POST['email']
+            image = request.FILES['image']
+            form = ProfileModel.objects.get(id=id)
+            form.id =id
+            form.name = first_name
+            form.email = email
+            form.profile_image = image
+            form.save()
+        except:
+            form = ProfileModel.objects.get(id=id)
+            form.id = id
             form.name = first_name
             form.email = email
             form.save()
-            return  redirect('profile')
-        except:
-            first_name = request.POST['first_name']
-            email = request.POST['email']
-            myuser = ProfileModel(name=first_name,email=email,username=request.user)
-            myuser.save()
-            return redirect('profile')
+        return redirect('profile')
     else:
         form = User.objects.get(username=request.user)
         return render(request, "edit_profile.html", {'form': form})
@@ -139,9 +145,16 @@ def room(request,room):
 def search(request):
     search = request.POST['search']
     if search:
-        match = ProfileModel.objects.filter(Q(name__icontains=search))
+        match = ProfileModel.objects.filter(Q(name__icontains=search)).filter(username__icontains=search).distinct()
         if match:
-            return render(request, "search.html", {"user": match, "search": search})
+            return render(request, "search.html", {"data": match, "search": search})
         else:
             messages.success(request, "search not found")
-            return render(request, "search.html", {"search": search})
+            return render(request, "search.html", {"user": '',"search": search})
+
+
+def delete(request,id,ro):
+    Message.objects.get(id=id).delete()
+    print(id,"""""""""""""""""",ro)
+    room_details = Room.objects.get(id=ro).name
+    return redirect('/room/'+room_details)
