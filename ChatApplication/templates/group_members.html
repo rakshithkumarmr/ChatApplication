@@ -1,0 +1,15 @@
+{% extends 'basic.html' %}
+{% block title %}Group Members{% endblock %}
+{% block body %}
+{% load static %}
+    <table class="table" style="margin-left: 25%;margin-top: 5%;width: 50%;margin-right: 25%">
+        <tr><td>
+            <h3 style="color: red">Group Members</h3></td>
+        </tr>
+        {% for x in data %}
+            <tr><td>
+                    <h5>{{ x.member }}</h5></td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

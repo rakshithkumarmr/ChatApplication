@@ -1,0 +1,96 @@
+{% extends 'basic.html' %}
+{% block title %}Group{% endblock %}
+{% block body %}
+{% load static %}
+<br>
+    <div class="active" style="margin-left: 5%;margin-right: 5%;border-style: solid">
+    <table class="table"><tr><td width="25%">
+    <div class="vertical-menu" style="padding: 2%">
+        <a href="{% url 'group' %}">Your Groups</a>
+        <a href="{% url 'create_group' %}">Create Group</a>
+        <a href="{% url 'search_group' %}">Search Group</a>
+    </div>
+    </td>
+    <td width="75%">
+    <div style="padding: 2%">
+            {% if group_details %}
+                {% if mess %}
+                    <h6 style="color: red">{{ mess }}</h6>
+                {% else %}
+                    <table class="table">
+                        <tr><td><h2 style="color: red">My groups</h2></td></tr>
+                    {% for x in group_info %}
+                        <tr><td>
+                            <h3><a href="{% url 'group1' group_name=x.name %}">{{ x.name }} </a></h3></td>
+                        </tr>
+                    {% endfor %}
+                    </table>
+                {% endif %}
+            {% endif %}
+            {% if create_group %}
+                <div>
+                    <div>
+                        {% if mess %}<h6 style="color: red">{{ mess }}</h6>{% endif %}
+                    </div><br>
+                    <form class="form-inline my-2 my-lg-0" style="padding-right: 2%" method="post" action="{% url 'create_group' %}">
+                        {% csrf_token %}
+
+                        <input class="form-control mr-sm-2" type="text" placeholder="Create Group" aria-label="Search" name="group_name" required>
+                        <input class="btn btn-outline-success my-2 my-sm-0" type="submit" value="Create Group" />
+                    </form>
+                </div>
+            {% endif %}
+            {% if search_group %}
+                <div>
+                    <form class="form-inline my-2 my-lg-0" style="padding-right: 2%" method="post" action="{% url 'search_group' %}">
+                        {% csrf_token %}
+                        <input class="form-control mr-sm-2" placeholder="Search Group" aria-label="Search Group" name="search" required>
+                        <input class="btn btn-outline-success my-2 my-sm-0" type="submit" value="Seacrh Group" />
+                    </form>
+                </div>
+                {% if search %}
+                    <h4 style="padding-top: 2%;font-family: 'Lemonada', cursive;color: #0d0f91">Searched result for '{{ search }}'</h4>
+                    {% if data %}
+                        {% if data == 'join' %}
+                            <div style="border: lightseagreen;padding: 2%">
+                            <h2>{{ name.name }}</h2>
+                            <h6>{{ ss }}</h6>
+                            <form method="post" action="{% url 'join_group' %}">
+                                {% csrf_token %}
+                                    <input type="hidden" value="{{ search }}" name="group">
+                                    <button class="btn btn-primary" type="submit">Join</button>
+                                </form>
+                            </div>
+                        {% else %}
+                            <div style="border: lightseagreen;padding: 2%">
+                            <h2><a href="{% url 'group1' group_name=search %}">{{ data.name }}</a></h2>
+                            <h6>{{ ss }}</h6>
+                            </div>
+                        {% endif %}
+                    {% else %}
+                        <h4 style="color: red">{{ mess }}</h4>
+                    {% endif %}
+                {% endif %}
+            {% endif %}
+    </div>
+    </td></tr></table>
+</div>
+<style>
+    .vertical-menu {
+  width: 200px;
+}
+
+.vertical-menu a {
+  background-color: #eee;
+  color: black;
+  display: block;
+  padding: 12px;
+  text-decoration: none;
+}
+
+.vertical-menu a:hover {
+  background-color: #ccc;
+}
+
+</style>
+{% endblock %}

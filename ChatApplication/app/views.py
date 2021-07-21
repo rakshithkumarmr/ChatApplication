@@ -4,10 +4,11 @@ from django.shortcuts import redirect
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.http import HttpResponse, JsonResponse
-from  .models import ProfileModel, Room, Message
+from  .models import ProfileModel, Room, Message, Group, GroupMessages, AddMembers
 from .forms import SignupForm
 from django.contrib.auth import logout
 from django.db.models import Q
+
 
 def home(request):
   return render(request, 'index.html')
@@ -155,6 +156,129 @@ def search(request):
 
 def delete(request,id,ro):
     Message.objects.get(id=id).delete()
-    print(id,"""""""""""""""""",ro)
     room_details = Room.objects.get(id=ro).name
     return redirect('/room/'+room_details)
+
+
+def group(request):
+    group_details ="group detail"
+    am = AddMembers.objects.filter(member=str(request.user))
+    group = []
+    for x in am:
+        group.append(Group.objects.get(id=int(x.group_id)))
+    if group:
+        return render(request, 'group.html', {'group_details': group_details,'group_info':group})
+    else:
+        return render(request,'group.html',{'group_details':group_details,'mess':"no groups available"})
+
+
+def create_group(request):
+    create_group = "create_group"
+    if request.method == "POST":
+        group_name = request.POST['group_name']
+        if Group.objects.filter(name=group_name).exists():
+            mess = "This group name is already available"
+            return render(request, 'group.html', {'create_group': create_group,'mess':mess})
+        else:
+            new_group = Group.objects.create(name=group_name,users=str(request.user))
+            new_group.save()
+            member = str(request.user)
+            group_id = new_group.id
+            am = AddMembers.objects.create(member=member,group_id=group_id)
+            am.save()
+            return redirect('/group1/' + group_name)
+    return render(request, 'group.html', {'create_group': create_group})
+
+
+def search_group(request):
+    search_group = "search_group"
+    if request.method == "POST":
+        search = request.POST['search']
+        if search:
+            match = Group.objects.filter(name=search).exists()
+            if match:
+                match1 = Group.objects.get(name=search)
+                data = AddMembers.objects.filter(group_id=match1.id,member=str(request.user))
+                if data:
+                    name = Group.objects.get(name=search)
+                    ss = "You are alredy joined this group"
+                    return render(request, "group.html", {"data": name, "search": search,'search_group': search_group,"ss":ss})
+                else:
+                    name = Group.objects.get(name=search)
+                    ss = "You are not in the group." \
+                         " You want to join the group?"
+                    return render(request, "group.html", {"data": 'join', "search": search,'search_group': search_group,"ss":ss,"name":name})
+            else:
+                mess =  "search not found"
+                return render(request, "group.html", { "search": search,'search_group': search_group,'mess':mess})
+    return render(request, 'group.html', {'search_group': search_group})
+
+
+def group1(request,group_name):
+    username = request.user
+    group_details = Group.objects.get(name=group_name).id
+    mess = GroupMessages.objects.filter(group=group_details)
+    group_details = Group.objects.get(name=group_name)
+    return render(request, 'visit_group.html',
+                  {'username': str(username), 'group': group_name, 'group_details': group_details, 'mess': mess})
+
+
+def send1(request):
+    message = request.POST['message']
+    username = request.POST['username']
+    group_id = request.POST['group_id']
+    group = request.POST['group']
+    new_message = GroupMessages.objects.create(message=message, user=username, group=group_id)
+    new_message.save()
+    return redirect('/group1/' + group)
+
+
+def delete_group(request,id,gr):
+    z = id+gr
+    res_first = z[0:len(z) // 2]
+    res_second = z[len(z) // 2 if len(z) % 2 == 0
+                          else ((len(z) // 2) + 1):]
+    GroupMessages.objects.get(id=res_first).delete()
+
+    group_details = Group.objects.get(id=res_second).name
+    return redirect('/group1/'+group_details)
+
+def add_member(request,group):
+    if request.method == "POST":
+        search = request.POST['search']
+        if search:
+            match = User.objects.filter(username=search).exists()
+            if match:
+                gd = Group.objects.get(name=group).id
+                m = AddMembers.objects.filter(member=search, group_id=gd).exists()
+                if m:
+                    mess = "user alredy in this group"
+                    return render(request, "add_member.html", {"group_name": group, 'mess': mess})
+                else:
+                    AddMembers.objects.create(member=search,group_id=gd).save()
+                    mess = "successfully added"
+                    return render(request, "add_member.html", {"group_name":group,'mess': mess})
+            else:
+                mess = "user not found"
+                return render(request, "add_member.html", {"group_name":group,'mess': mess})
+
+    return render(request,"add_member.html",{"group_name":group})
+
+
+def group_members(request,group):
+    id1 = Group.objects.get(name=group).id
+    data = AddMembers.objects.filter(group_id=id1)
+    return render(request,'group_members.html',{'data':data})
+
+
+def leave_group(request,group):
+    id1 = Group.objects.get(name=group).id
+    data = AddMembers.objects.get(group_id=id1,member=str(request.user)).delete()
+    return redirect('group')
+
+
+def join_group(request):
+    group = request.POST['group']
+    id = Group.objects.get(name=group).id
+    AddMembers.objects.create(member=str(request.user),group_id=id).save()
+    return redirect('/group1/' + group)

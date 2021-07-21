@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from datetime import datetime
+import json
 
 
 def get_default_profile_image():
@@ -24,4 +25,16 @@ class Message(models.Model):
     user = models.CharField(max_length=100)
     room = models.CharField(max_length=10000)
 
+class Group(models.Model):
+    name = models.CharField(max_length=1000)
+    users = models.CharField(max_length=2000)
 
+class GroupMessages(models.Model):
+    message = models.CharField(max_length=1000)
+    date = models.DateTimeField(default=datetime.now, blank=True)
+    user = models.CharField(max_length=100)
+    group = models.CharField(max_length=10000)
+
+class AddMembers(models.Model):
+    member = models.CharField(max_length=100)
+    group_id = models.CharField(max_length=100)

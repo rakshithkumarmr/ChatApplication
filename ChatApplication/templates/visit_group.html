@@ -1,0 +1,90 @@
+{% extends 'basic.html' %}
+{% block title %}{{ group }} {% endblock %}
+{% block body %}
+{% load static %}
+
+<h2>{{group}} - DjChat</h2>
+
+<div id="display">
+
+
+
+<div class="container">
+    <style>
+    input[type=text], select {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    }
+
+    button[type=submit] {
+    width: 100%;
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    }
+
+    button[type=submit]:hover {
+    background-color: #45a049;
+    }
+
+    </style>
+    <div>
+        {% if mess %}
+            <div style="border: #0d0f91;border-style: solid;">
+            <br>
+            {% for x in mess %}
+                <div class="" >
+                    <div style="align-items: initial">
+                {% if x.user == username %}
+                    <div style="margin-left: 50%;">
+                        <div style="margin-right: 5%;background-color: lightcyan;">
+                            <h6 style="color: red">{{ x.user }}</h6>
+                            <h3>{{ x.message }}</h3></div>
+                        <div style=";font-size: xx-small">{{ x.date }}</div>
+                        <div style=";font-size: small">
+                            <a href="{%  url 'delete_group' id=x.id gr=x.group  %}">Delete</a>
+                        </div>
+                    </div>
+                {% else %}
+                    <div style="margin-right: 50%;">
+                        <div style="margin-left: 5%;background-color: lightgoldenrodyellow;">
+                            <h6 style="color: red">{{ x.user}}</h6>
+                            <h3>{{ x.message }}</h3></div>
+                        <div style="margin-left: 5%;font-size: xx-small"> {{ username }} {{ x.date }}</div>
+                        <div style="margin-left: 5%;font-size: small">
+                            <a href="{%  url 'delete_group' id=x.id gr=x.group  %}">Delete</a>
+                        </div>
+                    </div>
+                {% endif %}
+                </div>
+             {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <form id="post-form" method="post" action="{% url 'send1' %}">
+        {% csrf_token %}
+        <input type="hidden" name="username" id="username" value="{{username}}"/>
+        <input type="hidden" name="group" id="group" value="{{group}}"/>
+        <input type="hidden" name="group_id" id="group_id" value="{{group_details.id}}"/>
+        <input type="text" name="message" id="message" width="100px" placeholder="message" required/>
+        <button type="submit" >Send</button>
+    </form>
+    <div>
+        <a href="{% url 'group_members' group=group %}">Group members</a><br>
+        <a href="{% url 'add_member' group=group %}">Add Members</a><br>
+        <a href="{% url 'leave_group' group=group %}">Leave Group</a>
+    </div>
+</div>
+
+</div>
+{% endblock %}

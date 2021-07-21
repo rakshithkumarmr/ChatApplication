@@ -1,0 +1,21 @@
+{% extends 'basic.html' %}
+{% block title %}{{ group_name }} {% endblock %}
+{% block body %}
+{% load static %}
+
+<h2>{{group_name}} - DjChat</h2>
+
+    <div class="container">
+            <div>
+                {% if mess %}<h6 style="color: red">{{ mess }}</h6>{% endif %}
+            </div>
+         <form class="form-inline my-2 my-lg-0" style="padding-right: 2%" method="post" action="{% url 'add_member' group=group_name %}">
+              {% csrf_token %}
+              <div>
+              <input class="form-control mr-sm-2" placeholder="Search Username" aria-label="Search Group" name="search" required>
+              <input class="btn btn-outline-success my-2 my-sm-0" type="submit" value="Add Member" />
+              </div>
+         </form>
+    </div>
+
+{% endblock %}
